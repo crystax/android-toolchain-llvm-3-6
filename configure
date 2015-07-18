@@ -658,6 +658,7 @@ CPP
 subdirs
 ENABLE_POLLY
 LLVM_HAS_POLLY
+LLDB_ENABLE_DEBUGSERVER
 build
 build_cpu
 build_vendor
@@ -1453,6 +1454,7 @@ Optional Features:
                           YES)
   --enable-libedit        Use libedit if available (default is YES)
   --enable-libffi         Check for the presence of libffi (default is NO)
+  --enable-debugserver    When bulding LLDB, build debugserver binary (default is YES)
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -3788,6 +3790,23 @@ if (test -d ${srcdir}/tools/polly) && (test $ENABLE_POLLY -eq 1) ; then
   subdirs="$subdirs tools/polly"
 
 fi
+
+# Check whether --enable-debugserver was given.
+if test "${enable_debugserver+set}" = set; then
+  enableval=$enable_debugserver;
+else
+  enableval=yes
+fi
+
+case "$enableval" in
+  yes) LLDB_ENABLE_DEBUGSERVER=1
+ ;;
+  no)  LLDB_ENABLE_DEBUGSERVER=0
+ ;;
+  *) { { echo "$as_me:$LINENO: error: Invalid setting for --enable-debugserver. Use \"yes\" or \"no\"" >&5
+echo "$as_me: error: Invalid setting for --enable-debugserver. Use \"yes\" or \"no\"" >&2;}
+   { (exit 1); exit 1; }; } ;;
+esac
 
 
 # Make sure we can run config.sub.
@@ -19359,6 +19378,7 @@ CPP!$CPP$ac_delim
 subdirs!$subdirs$ac_delim
 ENABLE_POLLY!$ENABLE_POLLY$ac_delim
 LLVM_HAS_POLLY!$LLVM_HAS_POLLY$ac_delim
+LLDB_ENABLE_DEBUGSERVER!$LLDB_ENABLE_DEBUGSERVER$ac_delim
 build!$build$ac_delim
 build_cpu!$build_cpu$ac_delim
 build_vendor!$build_vendor$ac_delim
@@ -19402,7 +19422,7 @@ DEBUG_RUNTIME!$DEBUG_RUNTIME$ac_delim
 DEBUG_SYMBOLS!$DEBUG_SYMBOLS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 98; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
